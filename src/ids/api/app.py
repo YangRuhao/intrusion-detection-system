@@ -45,4 +45,7 @@ def predict(req: PredictRequest):
         score = float(pipe.decision_function(X)[0])
 
     pred = 1 if score >= 0.5 else 0
-    return {"prediction": "attack" if pred == 1 else "benign", "probability_attack": score}
+    return {
+        "prediction": "attack" if pred == 1 else "benign",
+        "probability_attack": score,
+    }

@@ -2,6 +2,7 @@ from __future__ import annotations
 import pandas as pd
 from ids.config import ARTIFACTS_DIR
 
+
 def main():
     test_path = ARTIFACTS_DIR / "test_split.csv"
     if not test_path.exists():
@@ -16,6 +17,7 @@ def main():
 
     # Can extend this to compare with a saved train split if you save it too
     print("Done")
+
 
 if __name__ == "__main__":
     main()

@@ -37,7 +37,9 @@ def build_model(model_name: str, y_bin_train: np.ndarray, cfg: TrainConfig):
 
     if model_name == "random_forest":
         classes = np.unique(y_bin_train)
-        weights = compute_class_weight(class_weight="balanced", classes=classes, y=y_bin_train)
+        weights = compute_class_weight(
+            class_weight="balanced", classes=classes, y=y_bin_train
+        )
         class_weight = {int(c): float(w) for c, w in zip(classes, weights)}
         return RandomForestClassifier(
             n_estimators=cfg.n_estimators,
@@ -54,7 +56,9 @@ def train_and_validate(cfg: TrainConfig) -> Path:
     FIGURES_DIR.mkdir(parents=True, exist_ok=True)
 
     df = load_raw_csv(sample_frac=cfg.sample_frac)
-    train_df, val_df, test_df, label_col = split_train_val_test(df, SplitConfig(random_state=cfg.random_state))
+    train_df, val_df, test_df, label_col = split_train_val_test(
+        df, SplitConfig(random_state=cfg.random_state)
+    )
 
     X_train, y_train = make_xy(train_df, label_col)
     X_val, y_val = make_xy(val_df, label_col)
@@ -66,20 +70,28 @@ def train_and_validate(cfg: TrainConfig) -> Path:
     model = build_model(cfg.model_name, y_train_bin, cfg)
 
     if cfg.use_smote:
-        pipe = ImbPipeline(steps=[
-            ("preprocess", preprocessor),
-            ("smote", SMOTE(random_state=cfg.random_state)),
-            ("model", model),
-        ])
+        pipe = ImbPipeline(
+            steps=[
+                ("preprocess", preprocessor),
+                ("smote", SMOTE(random_state=cfg.random_state)),
+                ("model", model),
+            ]
+        )
     else:
-        pipe = ImbPipeline(steps=[
-            ("preprocess", preprocessor),
-            ("model", model),
-        ])
+        pipe = ImbPipeline(
+            steps=[
+                ("preprocess", preprocessor),
+                ("model", model),
+            ]
+        )
 
     pipe.fit(X_train, y_train_bin)
 
-    val_scores = pipe.predict_proba(X_val)[:, 1] if hasattr(pipe, "predict_proba") else pipe.decision_function(X_val)
+    val_scores = (
+        pipe.predict_proba(X_val)[:, 1]
+        if hasattr(pipe, "predict_proba")
+        else pipe.decision_function(X_val)
+    )
     ap = average_precision_score(y_val_bin, val_scores)
     print(f"Validation Average Precision (PR-AUC): {ap:.4f}")
 
@@ -111,11 +123,18 @@ def train_and_validate(cfg: TrainConfig) -> Path:
 
 def parse_args() -> TrainConfig:
     p = argparse.ArgumentParser()
-    p.add_argument("--model", choices=["logistic", "random_forest"], default="random_forest")
+    p.add_argument(
+        "--model", choices=["logistic", "random_forest"], default="random_forest"
+    )
     p.add_argument("--use-smote", action="store_true")
     p.add_argument("--n-estimators", type=int, default=300)
     p.add_argument("--random-state", type=int, default=42)
-    p.add_argument("--sample-frac", type=float, default=None, help="Train on a fraction of the dataset for faster iteration (e.g., 0.2).")
+    p.add_argument(
+        "--sample-frac",
+        type=float,
+        default=None,
+        help="Train on a fraction of the dataset for faster iteration (e.g., 0.2).",
+    )
     a = p.parse_args()
     return TrainConfig(
         model_name=a.model,

@@ -22,10 +22,19 @@ def predict_one(json_path: Path) -> None:
     payload = json.loads(json_path.read_text(encoding="utf-8"))
     X = pd.DataFrame([payload])  # single row
 
-    score = pipe.predict_proba(X)[:, 1][0] if hasattr(pipe, "predict_proba") else float(pipe.decision_function(X)[0])
+    score = (
+        pipe.predict_proba(X)[:, 1][0]
+        if hasattr(pipe, "predict_proba")
+        else float(pipe.decision_function(X)[0])
+    )
     pred = int(score >= 0.5)
 
-    print({"prediction": "attack" if pred == 1 else "benign", "probability_attack": float(score)})
+    print(
+        {
+            "prediction": "attack" if pred == 1 else "benign",
+            "probability_attack": float(score),
+        }
+    )
 
 
 if __name__ == "__main__":

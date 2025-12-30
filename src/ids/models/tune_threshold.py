@@ -9,6 +9,7 @@ from ids.config import ARTIFACTS_DIR
 from ids.data.split import make_binary_label
 from ids.features.preprocess import make_xy
 
+
 def main(target_recall: float = 0.99):
     pipe = joblib.load(ARTIFACTS_DIR / "ids_model.joblib")
     meta = joblib.load(ARTIFACTS_DIR / "metadata.joblib")
@@ -37,6 +38,7 @@ def main(target_recall: float = 0.99):
     best_threshold = thresholds[best_idx]
     print(f"Threshold for recall >= {target_recall}: {best_threshold:.6f}")
     print(f"Precision: {precision[best_idx]:.4f}, Recall: {recall[best_idx]:.4f}")
+
 
 if __name__ == "__main__":
     main()

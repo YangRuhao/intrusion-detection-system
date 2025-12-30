@@ -11,11 +11,16 @@ from sklearn.model_selection import train_test_split
 # Add dataset-specific label option
 LABEL_CANDIDATES = [
     "Attack Type",  # <-- your dataset
-    "Label", "label",
-    "Class", "class",
-    "target", "Target",
-    "Attack", "attack",
-    "Category", "category",
+    "Label",
+    "label",
+    "Class",
+    "class",
+    "target",
+    "Target",
+    "Attack",
+    "attack",
+    "Category",
+    "category",
 ]
 
 # In your dataset benign appears as "Normal Traffic"

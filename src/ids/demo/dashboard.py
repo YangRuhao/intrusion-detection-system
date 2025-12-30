@@ -72,16 +72,20 @@ def make_score_chart(stream_df: pd.DataFrame, threshold: float):
         tooltip=["t:Q", "score:Q", "pred_label:N", "true_label:N"],
     )
 
-    rule = alt.Chart(pd.DataFrame({"threshold": [threshold]})).mark_rule(
-        color="#f1c40f", strokeDash=[6, 6]
-    ).encode(y="threshold:Q")
+    rule = (
+        alt.Chart(pd.DataFrame({"threshold": [threshold]}))
+        .mark_rule(color="#f1c40f", strokeDash=[6, 6])
+        .encode(y="threshold:Q")
+    )
 
     return (line + points + rule).properties(height=360).interactive()
 
 
 def main():
     st.title("Live Intrusion Detection System Demo")
-    st.caption("Streams CICIDS2017 rows like network flows and shows real-time ML predictions.")
+    st.caption(
+        "Streams CICIDS2017 rows like network flows and shows real-time ML predictions."
+    )
 
     pipe, meta = load_model()
     label_col = str(meta["label_col"]).strip()
@@ -175,7 +179,9 @@ def main():
             use_container_width=True,
         )
 
-        alert_placeholder.dataframe(pd.DataFrame(alerts[-25:]), use_container_width=True)
+        alert_placeholder.dataframe(
+            pd.DataFrame(alerts[-25:]), use_container_width=True
+        )
         total_placeholder.metric("Total streamed", total_streamed)
 
         if show_raw:

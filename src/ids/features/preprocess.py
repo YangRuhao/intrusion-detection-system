@@ -15,7 +15,9 @@ class PreprocessConfig:
     scale_numeric: bool = True
 
 
-def build_preprocessor(X: pd.DataFrame, cfg: PreprocessConfig = PreprocessConfig()) -> ColumnTransformer:
+def build_preprocessor(
+    X: pd.DataFrame, cfg: PreprocessConfig = PreprocessConfig()
+) -> ColumnTransformer:
     X = X.copy()
     X.columns = X.columns.astype(str).str.strip()
 
@@ -29,7 +31,9 @@ def build_preprocessor(X: pd.DataFrame, cfg: PreprocessConfig = PreprocessConfig
     if len(numeric_transformer.steps) == 0:
         numeric_transformer = "passthrough"
 
-    categorical_transformer = OneHotEncoder(handle_unknown="ignore") if categorical_cols else "drop"
+    categorical_transformer = (
+        OneHotEncoder(handle_unknown="ignore") if categorical_cols else "drop"
+    )
 
     return ColumnTransformer(
         transformers=[

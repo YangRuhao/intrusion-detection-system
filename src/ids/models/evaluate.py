@@ -22,7 +22,9 @@ def load_artifacts():
     model_path = ARTIFACTS_DIR / "ids_model.joblib"
     meta_path = ARTIFACTS_DIR / "metadata.joblib"
     if not model_path.exists() or not meta_path.exists():
-        raise FileNotFoundError("Model artifacts not found. Run: python -m ids.models.train")
+        raise FileNotFoundError(
+            "Model artifacts not found. Run: python -m ids.models.train"
+        )
 
     pipe = joblib.load(model_path)
     meta = joblib.load(meta_path)
@@ -42,7 +44,9 @@ def evaluate(threshold: float = 0.5, sample_frac: float | None = None) -> None:
         test_df.columns = test_df.columns.astype(str).str.strip()
     else:
         df = load_raw_csv(sample_frac=sample_frac)
-        _, _, test_df, label_col = split_train_val_test(df, SplitConfig(random_state=int(meta.get("random_state", 42))))
+        _, _, test_df, label_col = split_train_val_test(
+            df, SplitConfig(random_state=int(meta.get("random_state", 42)))
+        )
 
     X_test, y_test = make_xy(test_df, label_col)
     y_test_bin = make_binary_label(y_test)
@@ -57,7 +61,11 @@ def evaluate(threshold: float = 0.5, sample_frac: float | None = None) -> None:
     ap = average_precision_score(y_test_bin, y_score)
     print(f"\nTest Average Precision (PR-AUC): {ap:.4f}")
     print(f"Threshold: {threshold:.2f}\n")
-    print(classification_report(y_test_bin, y_pred, digits=4, target_names=["benign", "attack"]))
+    print(
+        classification_report(
+            y_test_bin, y_pred, digits=4, target_names=["benign", "attack"]
+        )
+    )
 
     # Confusion matrix
     ConfusionMatrixDisplay.from_predictions(y_test_bin, y_pred, values_format="d")

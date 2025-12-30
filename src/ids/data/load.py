@@ -6,7 +6,9 @@ import pandas as pd
 from ids.config import RAW_DIR, DatasetConfig
 
 
-def load_raw_csv(path: Path | None = None, sample_frac: float | None = None) -> pd.DataFrame:
+def load_raw_csv(
+    path: Path | None = None, sample_frac: float | None = None
+) -> pd.DataFrame:
     cfg = DatasetConfig()
     csv_path = path if path is not None else (RAW_DIR / cfg.raw_filename)
     if not csv_path.exists():
