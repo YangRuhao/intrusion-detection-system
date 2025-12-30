@@ -1,11 +1,9 @@
 from __future__ import annotations
 
 import argparse
-from pathlib import Path
 
 import joblib
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 from sklearn.metrics import (
     ConfusionMatrixDisplay,
@@ -62,7 +60,7 @@ def evaluate(threshold: float = 0.5, sample_frac: float | None = None) -> None:
     print(classification_report(y_test_bin, y_pred, digits=4, target_names=["benign", "attack"]))
 
     # Confusion matrix
-    disp = ConfusionMatrixDisplay.from_predictions(y_test_bin, y_pred, values_format="d")
+    ConfusionMatrixDisplay.from_predictions(y_test_bin, y_pred, values_format="d")
     plt.title("Confusion Matrix (Attack vs Benign)")
     cm_path = FIGURES_DIR / "confusion_matrix.png"
     plt.savefig(cm_path, bbox_inches="tight", dpi=200)

@@ -4,7 +4,6 @@ import time
 from collections import deque
 
 import joblib
-import numpy as np
 import pandas as pd
 import streamlit as st
 import altair as alt

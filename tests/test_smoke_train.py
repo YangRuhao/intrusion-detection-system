@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pandas as pd
-import numpy as np
 
 from ids.data.split import detect_label_column, make_binary_label
 
