@@ -30,47 +30,29 @@ A trained ML model analyzes network flow records and predicts whether traffic is
 
 ```mermaid
 flowchart LR
-    %% =========================
-    %% Data Source
-    %% =========================
-    A[Network Traffic Dataset<br/>(CICIDS2017<br/>Flow Records)]
+  A["Network Traffic Dataset\nCICIDS2017 Flow Records"]
 
-    %% =========================
-    %% Offline Training Pipeline
-    %% =========================
-    A --> B[Data Loading & Cleaning<br/>(NaNs, Infs, Column Normalization)]
-    B --> C[Feature Preprocessing<br/>(Scaling, Encoding)]
-    C --> D[Train / Validation / Test Split]
-    D --> E[ML Training<br/>(Random Forest / Logistic Regression)]
-    E --> F[Trained IDS Model<br/>(joblib artifact)]
+  A --> B["Data Loading & Cleaning\nNaNs, Infs, Column normalization"]
+  B --> C["Feature Preprocessing\nScaling, Encoding"]
+  C --> D["Train / Validation / Test Split"]
+  D --> E["ML Training\nRandom Forest / Logistic Regression"]
+  E --> F["Trained IDS Model\njoblib artifact"]
 
-    %% =========================
-    %% Online / Inference Path
-    %% =========================
-    A --> G[Streaming Flow Input<br/>(Replay / Live Simulation)]
-    G --> H[Feature Preprocessing<br/>(Same as Training)]
-    F --> H
-    H --> I[Attack Probability Score<br/>(0.0 – 1.0)]
+  A --> G["Streaming Flow Input\nReplay or Live simulation"]
+  G --> H["Feature Preprocessing\nSame as training"]
+  F --> H
+  H --> I["Attack Probability Score\n0.0 to 1.0"]
 
-    %% =========================
-    %% Decision Logic
-    %% =========================
-    I --> J{Detection Threshold}
-    J -->|Score ≥ Threshold| K[Intrusion Alert]
-    J -->|Score < Threshold| L[Benign Traffic]
+  I --> J{"Detection Threshold"}
+  J -->|Score >= Threshold| K["Intrusion Alert"]
+  J -->|Score < Threshold| L["Benign Traffic"]
 
-    %% =========================
-    %% Visualization & Interaction
-    %% =========================
-    I --> M[Live Dashboard<br/>(Streamlit)]
-    J --> M
-    K --> M
-    L --> M
+  I --> M["Live Dashboard\nStreamlit"]
+  J --> M
+  K --> M
+  L --> M
 
-    %% =========================
-    %% User Interaction
-    %% =========================
-    N[User / Analyst] -->|Adjust Threshold<br/>Control Stream Speed| M
+  N["User / Analyst"] -->|"Adjust threshold\nControl stream speed"| M
 ```
 
 ## Quickstart (PowerShell)
